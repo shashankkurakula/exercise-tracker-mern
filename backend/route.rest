@@ -1,0 +1,10 @@
+### add user
+POST http://localhost:5000/users/add
+
+{
+    "username": "Shashi"
+}
+
+# {
+#     "username": "Sharat"
+# }
