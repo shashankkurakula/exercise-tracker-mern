@@ -16,17 +16,6 @@ const Exercise = props => (
   </tr>
 )
 
-// var btnStyle = {
-
-//   color: '#007bff',
-//   textDecoration: 'none',
-//   backgroundColor: 'transparent',
-//   background: 'none',
-//   border: 'none',
-//   padding: 0,
-//   cursor: 'pointer',
-// }
-
 export default class ExercisesList extends Component {
   constructor(props) {
     super(props);
@@ -39,10 +28,10 @@ export default class ExercisesList extends Component {
   componentDidMount() {
     axios.get('http://localhost:5000/exercises/')
       .then(response => {
-        this.setState({ exercises: response.data })
+        this.setState({ exercises: response.data }) 
       })
       .catch((error) => {
-        console.log(error);
+        console.log(error) 
       })
   }
 

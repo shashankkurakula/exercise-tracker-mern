@@ -33,7 +33,7 @@ router.route('/update/:id').post((req, res) => {
     user.description = req.body.description;
     user.dob = Date.parse(req.body.dob);
 
-    user.save()
+    user.save()  
     .then(() => res.json('user updated!'))
     .catch((err) => res.status(400).json('error :' + err))
   })
