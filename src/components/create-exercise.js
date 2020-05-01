@@ -1,11 +1,15 @@
-import React, { Component } from 'react';
-import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import React, { Component } from "react"
+import axios from "axios"
+import DatePicker from "react-datepicker"
 
-export default class EditExercise extends Component {
+import "react-datepicker/dist/react-datepicker.css"
+
+export default class CreateExercise extends Component {
   constructor(props) {
+
     super(props);
+
+    this.userInputRef = React.createRef();
 
     this.onChangeUsername = this.onChangeUsername.bind(this);
     this.onChangeDescription = this.onChangeDescription.bind(this);
@@ -14,36 +18,25 @@ export default class EditExercise extends Component {
     this.onSubmit = this.onSubmit.bind(this);
 
     this.state = {
-      username: '',
-      description: '',
+      username: "",
+      description: "",
       duration: 0,
       date: new Date(),
-      users: []
-    }
+      users: [],
+    };
   }
 
   componentDidMount() {
-    axios.get('http://localhost:5000/exercises/'+this.props.match.params.id)
-      .then(response => {
+    axios.get('http://localhost:5000/users')
+    .then(res => {
+      if(res.data.length > 0) {
         this.setState({
-          username: response.data.username,
-          description: response.data.description,
-          duration: response.data.duration,
-          date: new Date(response.data.date)
-        })   
-      })
-      .catch(function (error) {
-        console.log(error);
-      })
-
-    axios.get('http://localhost:5000/users/')
-      .then(response => {
-        if (response.data.length > 0) {
-          this.setState({
-            users: response.data.map(user => user.username),
-          })
-        }
-      })
+          users: res.data.map(user => user.username),
+          username: 'Please select a user'
+          // username: res.data[0].username
+        })
+      }
+    })
       .catch((error) => {
         console.log(error);
       })
@@ -79,30 +72,36 @@ export default class EditExercise extends Component {
 
     const exercise = {
       username: this.state.username,
-      description: this.state.description,
+      description: this.state.description,  
       duration: this.state.duration,
       date: this.state.date
     }
 
     console.log(exercise);
 
-    axios.post('http://localhost:5000/exercises/update/' + this.props.match.params.id, exercise)
+    axios.post('http://localhost:5000/exercises/add', exercise)
       .then(res => console.log(res.data));
 
-    window.location = '/';
+      this.setState({
+        username: '',
+        description: '',
+        duration: 0,
+        date: new Date(),
+      })
   }
 
   render() {
     return (
     <div>
-      <h3>Edit Exercise Log</h3>
+      <h3>Create New Exercise</h3>
       <form onSubmit={this.onSubmit}>
         <div className="form-group"> 
           <label>Username: </label>
-          <select ref="userInput"
+          <select ref={this.userInputRef}
               required
               className="form-control"
               value={this.state.username}
+              // value={this.state.username}
               onChange={this.onChangeUsername}>
               {
                 this.state.users.map(function(user) {
@@ -143,7 +142,7 @@ export default class EditExercise extends Component {
         </div>
 
         <div className="form-group">
-          <input type="submit" value="Edit Exercise Log" className="btn btn-primary" />
+          <input type="submit" value="Create Exercise Log" className="btn btn-primary" />
         </div>
       </form>
     </div>
